@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: AuthenticationSystem
+
+  datasource:
+    url: jdbc:postgresql://localhost:5433/login_db
+    username: admin
+    password: securepassword123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+jwt:
+  secret: ${JWT_SECRET:my-super-secure-local-development-secret-key-12345}
+  access-token-expiration: 900000
+  refresh-token-expiration: 604800000
