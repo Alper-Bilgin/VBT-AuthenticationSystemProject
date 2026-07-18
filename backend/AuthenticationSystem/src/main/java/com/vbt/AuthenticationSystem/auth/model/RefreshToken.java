@@ -33,6 +33,9 @@ public class RefreshToken {
     @Builder.Default
     private boolean isRevoked = false;
 
+    @Transient
+    private String rawToken;
+    
     // Veritabanı bütünlüğü için nullable = false eklendi
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
