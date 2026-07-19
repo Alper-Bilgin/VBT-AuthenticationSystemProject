@@ -1,138 +1,244 @@
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';
+import 'app_radius.dart';
 import 'app_text_styles.dart';
 
+
+/// ===========================================================
+/// App Theme
+/// -----------------------------------------------------------
+/// Uygulamanın tüm görsel sistemini tek noktadan yönetir.
+/// ===========================================================
 
 class AppTheme {
 
   AppTheme._();
 
 
+
   static ThemeData lightTheme = ThemeData(
 
     useMaterial3: true,
+
+    brightness: Brightness.light,
+
+
+
+    colorScheme: ColorScheme.light(
+
+      primary: AppColors.primary,
+
+      secondary: AppColors.secondary,
+
+      surface: AppColors.surface,
+
+      error: AppColors.error,
+
+      outline: AppColors.border,
+
+    ),
+
 
 
     scaffoldBackgroundColor: AppColors.background,
 
 
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.light,
-    ),
 
 
-    fontFamily: "Inter",
+
+    //==========================================================
+    // Typography
+    //==========================================================
+
+    textTheme: TextTheme(
+
+      displayLarge: AppTextStyles.displayLarge,
+
+      headlineLarge: AppTextStyles.headlineLarge,
+
+      headlineMedium: AppTextStyles.headlineMedium,
 
 
-    textTheme: const TextTheme(
+      titleLarge: AppTextStyles.titleLarge,
 
-      headlineLarge:
-          AppTextStyles.headlineLarge,
-
-      headlineMedium:
-          AppTextStyles.headlineMedium,
-
-      titleLarge:
-          AppTextStyles.titleLarge,
-
-      titleMedium:
-          AppTextStyles.titleMedium,
-
-      bodyLarge:
-          AppTextStyles.bodyLarge,
-
-      bodyMedium:
-          AppTextStyles.bodyMedium,
-
-      labelSmall:
-          AppTextStyles.label,
-
-    ),
+      titleMedium: AppTextStyles.titleMedium,
 
 
-    appBarTheme: const AppBarTheme(
+      bodyLarge: AppTextStyles.bodyLarge,
 
-      backgroundColor: AppColors.primary,
+      bodyMedium: AppTextStyles.bodyMedium,
 
-      foregroundColor: Colors.white,
 
-      elevation: 0,
+      labelLarge: AppTextStyles.labelLarge,
 
-      centerTitle: true,
+      labelMedium: AppTextStyles.labelMedium,
+
+      labelSmall: AppTextStyles.labelSmall,
 
     ),
 
 
-    cardTheme: CardThemeData(
 
-      color: AppColors.surface,
 
-      elevation: 2,
 
-      margin: EdgeInsets.zero,
 
-    ),
-
+    //==========================================================
+    // TextField
+    //==========================================================
 
     inputDecorationTheme: InputDecorationTheme(
 
       filled: true,
 
+
       fillColor: AppColors.surface,
+
+
+
+      contentPadding: const EdgeInsets.symmetric(
+
+        horizontal: 20,
+
+        vertical: 16,
+
+      ),
+
+
+
+      hintStyle: AppTextStyles.bodyMedium,
+
 
 
       border: OutlineInputBorder(
 
-        borderRadius:
-            BorderRadius.circular(12),
+        borderRadius: AppRadius.radiusMd,
 
-        borderSide:
-            BorderSide(
-              color: AppColors.border,
-            ),
+        borderSide: BorderSide.none,
 
       ),
+
+
 
       enabledBorder: OutlineInputBorder(
 
-        borderRadius:
-            BorderRadius.circular(12),
-
-        borderSide:
-            BorderSide(
-              color: AppColors.border,
-            ),
-
-      ),
-
-    ),
+        borderRadius: AppRadius.radiusMd,
 
 
-    elevatedButtonTheme:
-        ElevatedButtonThemeData(
+        borderSide: BorderSide(
 
-      style:
-          ElevatedButton.styleFrom(
-
-        backgroundColor:
-            AppColors.primary,
-
-        foregroundColor:
-            Colors.white,
-
-        shape:
-            RoundedRectangleBorder(
-
-          borderRadius:
-              BorderRadius.circular(12),
+          color: AppColors.border,
 
         ),
 
       ),
 
+
+
+
+      focusedBorder: OutlineInputBorder(
+
+        borderRadius: AppRadius.radiusMd,
+
+
+        borderSide: BorderSide(
+
+          color: AppColors.primary,
+
+          width: 1.5,
+
+        ),
+
+      ),
+
+
     ),
+
+
+
+
+
+
+    //==========================================================
+    // Button
+    //==========================================================
+
+    elevatedButtonTheme: ElevatedButtonThemeData(
+
+      style: ElevatedButton.styleFrom(
+
+
+        backgroundColor: AppColors.primary,
+
+
+        foregroundColor: Colors.white,
+
+
+        elevation: 0,
+
+
+
+        padding: const EdgeInsets.symmetric(
+
+          horizontal: 24,
+
+          vertical: 16,
+
+        ),
+
+
+
+        shape: RoundedRectangleBorder(
+
+          borderRadius: AppRadius.radiusLg,
+
+        ),
+
+
+
+        textStyle: AppTextStyles.labelLarge,
+
+
+      ),
+
+    ),
+
+
+
+
+
+
+
+    //==========================================================
+    // Card
+    //==========================================================
+
+    cardTheme: CardThemeData(
+
+      color: AppColors.surface,
+
+
+      elevation: 0,
+
+
+      shape: RoundedRectangleBorder(
+
+        borderRadius: AppRadius.radiusLg,
+
+      ),
+
+    ),
+
+
+
+
+
+    dividerTheme: DividerThemeData(
+
+      color: AppColors.border,
+
+    ),
+
 
   );
 

@@ -1,65 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/authentication/presentation/screens/login_screen.dart';
 
+/// Uygulamanın tüm yönlendirmelerini yönetir.
 class AppRouter {
-
   AppRouter._();
 
-
   static final GoRouter router = GoRouter(
-
-    // Uygulamanın başlangıç rotası
+    // Açılış ekranı
     initialLocation: '/',
 
-
     routes: [
-
       GoRoute(
         path: '/',
-        name: 'splash',
-
-        builder: (context, state) {
-
-          return const Scaffold(
-
-            body: Center(
-
-              child: Text(
-                'VBT Authentication System',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-            ),
-
-          );
-
-        },
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
       ),
-
     ],
 
-
-    // Hatalı route gelirse gösterilecek ekran
+    // Tanımlanmamış bir route açılırsa gösterilir.
     errorBuilder: (context, state) {
-
       return Scaffold(
-
         body: Center(
-
           child: Text(
             'Page not found: ${state.uri}',
           ),
-
         ),
-
       );
-
     },
-
   );
-
 }
