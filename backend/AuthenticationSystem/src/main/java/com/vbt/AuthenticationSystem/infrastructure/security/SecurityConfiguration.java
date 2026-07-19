@@ -1,7 +1,8 @@
 package com.vbt.AuthenticationSystem.infrastructure.security;
-
+import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vbt.AuthenticationSystem.infrastructure.exception.ApiErrorResponse;
+import com.vbt.AuthenticationSystem.infrastructure.utils.ErrorResponseWriter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,16 +22,16 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
-    private final ObjectMapper objectMapper;
+    private final ErrorResponseWriter errorResponseWriter;
 
     public SecurityConfiguration(
             JwtAuthenticationFilter jwtAuthFilter,
             AuthenticationProvider authenticationProvider,
-            ObjectMapper objectMapper
+            ErrorResponseWriter errorResponseWriter // ObjectMapper yerine eklendi
     ) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authenticationProvider = authenticationProvider;
-        this.objectMapper = objectMapper;
+        this.errorResponseWriter = errorResponseWriter;
     }
 
     @Bean
@@ -49,32 +50,24 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 // JWT Filtresinden önce takılan Spring Security hataları için (401 ve 403)
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json;charset=UTF-8");
-                            ApiErrorResponse error = new ApiErrorResponse(
-                                    "Yetkisiz Erişim",
-                                    HttpServletResponse.SC_UNAUTHORIZED,
-                                    "Bu kaynağa erişmek için geçerli bir kimlik doğrulaması gerekiyor.",
-                                    request.getRequestURI(),
-                                    Instant.now(),
-                                    null
-                            );
-                            response.getWriter().write(objectMapper.writeValueAsString(error));
-                        })
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                            response.setContentType("application/json;charset=UTF-8");
-                            ApiErrorResponse error = new ApiErrorResponse(
-                                    "Erişim Reddedildi",
-                                    HttpServletResponse.SC_FORBIDDEN,
-                                    "Bu işlemi gerçekleştirmek için yeterli yetkiniz bulunmuyor.",
-                                    request.getRequestURI(),
-                                    Instant.now(),
-                                    null
-                            );
-                            response.getWriter().write(objectMapper.writeValueAsString(error));
-                        })
+                        .authenticationEntryPoint((request, response, authException) ->
+                                errorResponseWriter.write(
+                                        response,
+                                        HttpServletResponse.SC_UNAUTHORIZED,
+                                        "Yetkisiz Erişim",
+                                        "Bu kaynağa erişmek için geçerli bir kimlik doğrulaması gerekiyor.",
+                                        request.getRequestURI()
+                                )
+                        )
+                        .accessDeniedHandler((request, response, accessDeniedException) ->
+                                errorResponseWriter.write(
+                                        response,
+                                        HttpServletResponse.SC_FORBIDDEN,
+                                        "Erişim Reddedildi",
+                                        "Bu işlemi gerçekleştirmek için yeterli yetkiniz bulunmuyor.",
+                                        request.getRequestURI()
+                                )
+                        )
                 );
 
         return http.build();

@@ -100,4 +100,10 @@ public class RefreshTokenService {
             throw new InternalServerException("Hash algoritması başlatılamadı: SHA-256 bulunamadı", e);
         }
     }
+
+    @Transactional
+    public void revokeToken(RefreshToken token) {
+        token.setRevoked(true);
+        refreshTokenRepository.save(token);
+    }
 }
