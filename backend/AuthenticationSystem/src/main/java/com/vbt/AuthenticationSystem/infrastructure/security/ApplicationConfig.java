@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,7 +25,9 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı"));
+                // Spring Security'nin yerleşik exception'ını fırlatarak
+                // DaoAuthenticationProvider'ın BadCredentialsException'a çevirmesini sağlıyoruz.
+                .orElseThrow(() -> new UsernameNotFoundException("Kullanıcı bulunamadı"));
     }
 
     @Bean
@@ -43,5 +46,7 @@ public class ApplicationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+        // Not: Önceki hedeflerde Argon2/BCrypt bahsi geçmişti,
+        // Spring Security 6+ ile BCrypt veya DelegatingPasswordEncoder standarttır.
     }
 }

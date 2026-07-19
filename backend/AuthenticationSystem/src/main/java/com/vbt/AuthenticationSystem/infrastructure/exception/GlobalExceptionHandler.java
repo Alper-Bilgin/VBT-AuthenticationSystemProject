@@ -50,16 +50,9 @@ public class GlobalExceptionHandler {
 
     // 2. Kendi Yazdığımız Token Hataları (401 Unauthorized)
     @ExceptionHandler(TokenException.class)
-    public ResponseEntity<ApiErrorResponse> handleTokenException(
-            TokenException ex,
-            HttpServletRequest request
-    ) {
-        return buildResponse(
-                "Yetkilendirme Hatası",
-                HttpStatus.UNAUTHORIZED,
-                ex.getMessage(),
-                request.getRequestURI()
-        );
+    public ResponseEntity<ApiErrorResponse> handleTokenException(TokenException ex, HttpServletRequest request) {
+        // "Yetkilendirme Hatası" yerine "Oturum Hatası" olarak güncellendi
+        return buildResponse("Oturum Hatası", HttpStatus.UNAUTHORIZED, ex.getMessage(), request.getRequestURI());
     }
 
     // 3. JWT Kütüphanesinin (jjwt) Fırlattığı Hatalar (Filtreden handlerExceptionResolver ile gelenler - 401)
