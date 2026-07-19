@@ -22,6 +22,7 @@ spring:
       port: 6379
 
 jwt:
-  secret: ${JWT_SECRET:my-super-secure-local-development-secret-key-12345}
-  access-token-expiration: 900000
-  refresh-token-expiration: 604800000
+  # En az 256-bit (32 byte) uzunluğunda güvenli bir Hex string (Örn: openssl rand -hex 32)
+  secret-key: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+  access-token-expiration: 900000 # 15 dakika (milisaniye)
+  refresh-token-expiration: 604800000 # 7 gün (milisaniye)
