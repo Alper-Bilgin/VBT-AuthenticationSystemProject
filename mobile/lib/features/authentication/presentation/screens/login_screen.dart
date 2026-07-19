@@ -131,12 +131,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ),
-                  // Sola Dayalı "Create Account" Başlığı
+                  // Sola Dayalı Başlık
                   Positioned(
                     bottom: 80,
                     left: 28,
                     child: Text(
-                      "Create\nAccount",
+                      "LogIn",
                       style: AppTextStyles.headlineLarge.copyWith(
                         color: AppColors.textOnPrimary,
                         fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 10),
 
                     // 1. NAME FIELD (Gölge ve Derinlik Eklendi)
-                    Container(
+                   /* Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
@@ -190,7 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    const SizedBox(height: AppSpacing.md),*/
 
                     // 2. EMAIL FIELD (Gölge ve Derinlik Eklendi)
                     Container(
@@ -278,7 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       child: PrimaryButton(
-                        text: "Sign up",
+                        text: "Log in",
                         onPressed: _login,
                         isLoading: _controller.isLoading,
                       ),
@@ -343,7 +343,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           elevation: 0,
                         ),
                         child: Text(
-                          "Log in",
+                          "Create Account",
                           style: AppTextStyles.labelMedium.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.bold,
