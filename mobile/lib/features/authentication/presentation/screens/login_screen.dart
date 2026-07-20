@@ -1,3 +1,4 @@
+import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/widgets/custom_text_field.dart';
@@ -41,26 +42,42 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  Future<void> _login() async {
-    FocusScope.of(context).unfocus();
+  /// Form doğrulamasını yaptıktan sonra giriş işlemini başlatır.
+Future<void> _login() async {
+  // Klavyeyi kapat
+  FocusScope.of(context).unfocus();
 
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-
-    final success = await _controller.login();
-
-    if (!mounted) return;
-
-    if (!success && _controller.errorMessage != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_controller.errorMessage!),
-          backgroundColor: AppColors.error,
-        ),
-      );
-    }
+  // Form geçerli değilse işlemi durdur
+  if (!_formKey.currentState!.validate()) {
+    return;
   }
+
+  final success = await _controller.login();
+
+  if (!mounted) return;
+
+  if (success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Login successful."),
+      ),
+    );
+
+    // TODO: Home ekranı eklendiğinde yönlendirme yapılacak.
+    // context.go('/home');
+
+    return;
+  }
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        _controller.errorMessage ?? "Login failed.",
+      ),
+      backgroundColor: AppColors.error,
+    ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -329,28 +346,29 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                       child: OutlinedButton(
-                        onPressed: () {},
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 52),
-                          backgroundColor: Colors.white,
-                          side: const BorderSide(
-                            color: AppColors.textSecondary,
-                            width: 1.5,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          elevation: 0,
-                        ),
-                        child: Text(
-                          "Create Account",
-                          style: AppTextStyles.labelMedium.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
-                      ),
+  onPressed: () {
+    context.push('/register');
+  },
+  style: OutlinedButton.styleFrom(
+    minimumSize: const Size(double.infinity, 52),
+    backgroundColor: Colors.white,
+    side: const BorderSide(
+      color: AppColors.textSecondary,
+      width: 1.5,
+    ),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+  ),
+  child: Text(
+    "Create Account",
+    style: AppTextStyles.labelMedium.copyWith(
+      color: AppColors.primary,
+      fontWeight: FontWeight.bold,
+      letterSpacing: 0.5,
+    ),
+  ),
+),
                     ),
                     const SizedBox(height: AppSpacing.xl),
                   ],
