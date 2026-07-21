@@ -3,44 +3,55 @@ import 'package:flutter/material.dart';
 /// ===========================================================
 /// Login Controller
 /// -----------------------------------------------------------
-/// Login ekranındaki iş mantığını yönetir.
-/// UI sadece kullanıcı etkileşimlerini bu sınıfa iletir.
+/// Login ekranının iş mantığını yönetir.
 ///
-/// Backend bağlantısı daha sonra repository/service üzerinden
-/// buraya bağlanacaktır.
+/// Sorumlulukları:
+/// • Login işlemini başlatmak
+/// • Loading durumunu yönetmek
+/// • Hata mesajını yönetmek
+///
+/// Form doğrulamaları LoginScreen içerisindeki
+/// TextFormField validator'larında yapılmaktadır.
+///
+/// Backend entegrasyonu daha sonra
+/// AuthRepository + Dio ile eklenecektir.
 /// ===========================================================
 class LoginController extends ChangeNotifier {
-  // Giriş Alanı Kontrolcüleri (Name eklendi)
-  final nameController = TextEditingController();
+  // ===========================================================
+  // Controllers
+  // ===========================================================
+
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
 
+  // ===========================================================
+  // States
+  // ===========================================================
+
   bool _isLoading = false;
+
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
+
   String? get errorMessage => _errorMessage;
 
-  /// Kullanıcı kayıt/giriş işlemi
-  Future<bool> login() async {
-    _removeError();
+  // ===========================================================
+  // Login
+  // ===========================================================
 
-    if (!_validateForm()) {
-      return false;
-    }
+  Future<bool> login() async {
+    _clearError();
 
     try {
       _setLoading(true);
 
-      // TODO:
-      // Buraya ileride AuthRepository bağlanacak.
+      // AuthRepository.login() burada çağrılacak.
       //
-      // Örnek:
-      //
-      // await authRepository.register(
-      //    name: nameController.text.trim(),
-      //    email: emailController.text.trim(),
-      //    password: passwordController.text.trim(),
+      // await authRepository.login(
+      //   email: emailController.text.trim(),
+      //   password: passwordController.text,
       // );
 
       await Future.delayed(
@@ -48,81 +59,89 @@ class LoginController extends ChangeNotifier {
       );
 
       return true;
-    } catch (e) {
-      _errorMessage = "An error occurred. Please try again.";
-      notifyListeners();
+    } catch (_) {
+      _setError(
+        "An unexpected error occurred. Please try again.",
+      );
+
       return false;
     } finally {
       _setLoading(false);
     }
   }
 
-  /// Form elemanlarının doğruluğunu kontrol eden fonksiyon
-  bool _validateForm() {
-    final name = nameController.text.trim();
-    final email = emailController.text.trim();
-    final password = passwordController.text.trim();
+  // ===========================================================
+  // Validators
+  // ===========================================================
 
-    // 1. Name Doğrulaması (Yeni Eklendi)
-    if (name.isEmpty) {
-      _errorMessage = "Name is required";
-      notifyListeners();
-      return false;
+  String? validateEmail(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Email is required";
     }
 
-    // 2. Email Doğrulaması
-    if (email.isEmpty) {
-      _errorMessage = "Email is required";
-      notifyListeners();
-      return false;
-    }
-
-    if (!_isValidEmail(email)) {
-      _errorMessage = "Please enter a valid email";
-      notifyListeners();
-      return false;
-    }
-
-    // 3. Password Doğrulaması
-    if (password.isEmpty) {
-      _errorMessage = "Password is required";
-      notifyListeners();
-      return false;
-    }
-
-    if (password.length < 6) {
-      _errorMessage = "Password must be at least 6 characters";
-      notifyListeners();
-      return false;
-    }
-
-    return true;
-  }
-
-  /// RegEx ile email format kontrolü
-  bool _isValidEmail(String email) {
-    final regex = RegExp(
+    final emailRegex = RegExp(
       r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$',
     );
-    return regex.hasMatch(email);
+
+    if (!emailRegex.hasMatch(value.trim())) {
+      return "Please enter a valid email";
+    }
+
+    return null;
   }
+
+  String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Password is required";
+    }
+
+    if (value.length < 8) {
+      return "Password must be at least 8 characters";
+    }
+
+    if (value.length > 64) {
+      return "Password must be at most 64 characters";
+    }
+
+    final passwordRegex = RegExp(
+      r'^(?=.*[A-Z])(?=.*\d).+$',
+    );
+
+    if (!passwordRegex.hasMatch(value)) {
+      return "Password must contain at least one uppercase letter and one number";
+    }
+
+    return null;
+  }
+
+  // ===========================================================
+  // State Helpers
+  // ===========================================================
 
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
 
-  void _removeError() {
+  void _setError(String message) {
+    _errorMessage = message;
+    notifyListeners();
+  }
+
+  void _clearError() {
     _errorMessage = null;
     notifyListeners();
   }
 
+  // ===========================================================
+  // Dispose
+  // ===========================================================
+
   @override
   void dispose() {
-    // Bellek sızıntısını önlemek için nameController dispose edildi
-    nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+
     super.dispose();
   }
 }

@@ -89,17 +89,29 @@ class RegisterController {
     return null;
   }
 
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Password is required";
-    }
-
-    if (value.length < 6) {
-      return "Minimum 6 characters";
-    }
-
-    return null;
+ String? validatePassword(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Password is required";
   }
+
+  if (value.length < 8) {
+    return "Password must be at least 8 characters";
+  }
+
+  if (value.length > 64) {
+    return "Password must be at most 64 characters";
+  }
+
+  final passwordRegex = RegExp(
+    r'^(?=.*[A-Z])(?=.*\d).{8,64}$',
+  );
+
+  if (!passwordRegex.hasMatch(value)) {
+    return "Must contain 1 uppercase letter and 1 number";
+  }
+
+  return null;
+}
 
   String? validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {

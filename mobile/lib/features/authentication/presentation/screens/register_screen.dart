@@ -332,7 +332,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         controller:
                             _controller.confirmPasswordController,
                         label: "Confirm Password",
-                        hint: "••••••••",
+                        hint: "•••••••• (Min. 8 characters)",
                         prefixIcon: Icons.lock_reset_outlined,
                         obscureText: _obscureConfirmPassword,
                         textInputAction: TextInputAction.done,
@@ -356,7 +356,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
 
                     const SizedBox(height: AppSpacing.xl),
-                                        // =====================================================
+
+                     // =====================================================
                     // CREATE ACCOUNT BUTTON
                     // =====================================================
                     Container(

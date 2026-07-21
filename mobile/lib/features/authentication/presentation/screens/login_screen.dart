@@ -227,13 +227,10 @@ Future<void> _login() async {
                         hint: "example@email.com",
                         prefixIcon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return "Email is required";
-                          }
-                          return null;
-                        },
+
+                        validator: _controller.validateEmail,
                       ),
+
                     ),
                     const SizedBox(height: AppSpacing.md),
 
@@ -268,21 +265,15 @@ Future<void> _login() async {
                             color: AppColors.iconPrimary,
                           ),
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Password is required";
-                          }
-                          if (value.length < 6) {
-                            return "Minimum 6 characters";
-                          }
-                          return null;
-                        },
+
+                       validator: _controller.validatePassword,
                       ),
+                      
                     ),
                     
                     const SizedBox(height: AppSpacing.xl),
 
-                    // SIGN UP BUTTON (Marka Renginde Gölgeli)
+                    // LOG IN BUTTON (Marka Renginde Gölgeli)
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
