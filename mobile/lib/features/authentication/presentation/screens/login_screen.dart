@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
