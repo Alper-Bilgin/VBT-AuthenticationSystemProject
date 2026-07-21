@@ -1,7 +1,7 @@
-/// Uygulama içerisindeki animasyon sürelerini merkezi yönetir.
-/// 
-/// Böylece her yerde farklı duration kullanmak yerine
-/// tek bir tasarım dili oluşturulur.
+// Uygulama içerisindeki animasyon sürelerini merkezi yönetir.
+// 
+// Böylece her yerde farklı duration kullanmak yerine
+// tek bir tasarım dili oluşturulur.
 
 class AppDuration {
   AppDuration._();

@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-
-/// ===========================================================
-/// App Spacing
-/// -----------------------------------------------------------
-/// Uygulama genelinde kullanılan boşluk (spacing) değerleri.
-/// Padding, Margin ve SizedBox için ortak standart sağlar.
-/// ===========================================================
+// ===========================================================
+// App Spacing
+// -----------------------------------------------------------
+// Uygulama genelinde kullanılan boşluk (spacing) değerleri.
+// Padding, Margin ve SizedBox için ortak standart sağlar.
+// ===========================================================
 class AppSpacing {
   AppSpacing._();
 
