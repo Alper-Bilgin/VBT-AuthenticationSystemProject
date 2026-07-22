@@ -1,20 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/network/auth_api_service.dart';
 
 /// ===========================================================
 /// Login Controller
 /// -----------------------------------------------------------
 /// Login ekranının iş mantığını yönetir.
-///
-/// Sorumlulukları:
-/// • Login işlemini başlatmak
-/// • Loading durumunu yönetmek
-/// • Hata mesajını yönetmek
-///
-/// Form doğrulamaları LoginScreen içerisindeki
-/// TextFormField validator'larında yapılmaktadır.
-///
-/// Backend entegrasyonu daha sonra
-/// AuthRepository + Dio ile eklenecektir.
 /// ===========================================================
 class LoginController extends ChangeNotifier {
   // ===========================================================
@@ -47,18 +39,28 @@ class LoginController extends ChangeNotifier {
     try {
       _setLoading(true);
 
-      // AuthRepository.login() burada çağrılacak.
-      //
-      // await authRepository.login(
-      //   email: emailController.text.trim(),
-      //   password: passwordController.text,
-      // );
-
-      await Future.delayed(
-        const Duration(seconds: 1),
+      await AuthApiService.login(
+        email: emailController.text.trim(),
+        password: passwordController.text,
       );
 
       return true;
+    } on DioException catch (e) {
+      String message = "An unexpected error occurred.";
+
+      if (e.response?.data is Map<String, dynamic>) {
+        final data = e.response!.data as Map<String, dynamic>;
+
+        if (data["detail"] != null) {
+          message = data["detail"];
+        } else if (data["message"] != null) {
+          message = data["message"];
+        }
+      }
+
+      _setError(message);
+
+      return false;
     } catch (_) {
       _setError(
         "An unexpected error occurred. Please try again.",
@@ -141,7 +143,6 @@ class LoginController extends ChangeNotifier {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-
     super.dispose();
   }
 }
