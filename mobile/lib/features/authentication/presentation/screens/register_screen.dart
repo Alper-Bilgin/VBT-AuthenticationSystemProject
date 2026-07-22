@@ -197,58 +197,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                                        // =====================================================
-                    // FIRST NAME
-                    // =====================================================
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(.03),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: CustomTextField(
-                        controller: _controller.firstNameController,
-                        label: "First Name",
-                        hint: "John",
-                        prefixIcon: Icons.person_outline_rounded,
-                        textInputAction: TextInputAction.next,
-                        validator: _controller.validateFirstName,
-                      ),
-                    ),
-
-                    const SizedBox(height: AppSpacing.md),
-
-                    // =====================================================
-                    // LAST NAME
-                    // =====================================================
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(.03),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: CustomTextField(
-                        controller: _controller.lastNameController,
-                        label: "Last Name",
-                        hint: "Doe",
-                        prefixIcon: Icons.badge_outlined,
-                        textInputAction: TextInputAction.next,
-                        validator: _controller.validateLastName,
-                      ),
-                    ),
-
-                    const SizedBox(height: AppSpacing.md),
-
                     // =====================================================
                     // EMAIL
                     // =====================================================
