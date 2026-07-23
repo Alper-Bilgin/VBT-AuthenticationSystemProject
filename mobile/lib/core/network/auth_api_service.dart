@@ -14,6 +14,8 @@ class AuthApiService {
 
   static final Dio _dio = DioClient.dio;
 
+    static final Dio _refreshDio = Dio();
+
   // ===========================================================
   // Login
   // ===========================================================
@@ -61,20 +63,20 @@ class AuthApiService {
   }
 
   // ===========================================================
-  // Refresh Token
-  // ===========================================================
+// Refresh Token
+// ===========================================================
 
-  static Future<Response> refreshToken() async {
-    final refreshToken =
-        await SecureStorageService.getRefreshToken();
+static Future<Response> refreshToken() async {
+  final refreshToken =
+      await SecureStorageService.getRefreshToken();
 
-    return await _dio.post(
-      ApiConstants.refresh,
-      data: {
-        "refreshToken": refreshToken,
-      },
-    );
-  }
+  return await _refreshDio.post(
+    ApiConstants.refresh,
+    data: {
+      "refreshToken": refreshToken,
+    },
+  );
+}
 
   // ===========================================================
   // Logout

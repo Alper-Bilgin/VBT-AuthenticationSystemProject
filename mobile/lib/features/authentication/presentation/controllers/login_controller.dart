@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/network/auth_api_service.dart';
+import '../../../../core/storage/secure_storage_service.dart';
 
 /// ===========================================================
 /// Login Controller
@@ -40,11 +41,14 @@ class LoginController extends ChangeNotifier {
       _setLoading(true);
 
       await AuthApiService.login(
-        email: emailController.text.trim(),
-        password: passwordController.text,
-      );
+  email: emailController.text.trim(),
+  password: passwordController.text,
+);
 
-      return true;
+// Temporary debug
+await SecureStorageService.debugPrintTokens();
+
+return true;
     } on DioException catch (e) {
       String message = "An unexpected error occurred.";
 
