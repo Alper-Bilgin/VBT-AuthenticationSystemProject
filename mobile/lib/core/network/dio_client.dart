@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 
 import '../constants/api_constants.dart';
 
+import 'auth_interceptor.dart';
+
 // ===========================================================
 // Dio Client
 // -----------------------------------------------------------
@@ -21,5 +23,5 @@ class DioClient {
         'Accept': 'application/json',
       },
     ),
-  );
+  )..interceptors.add(AuthInterceptor());
 }
