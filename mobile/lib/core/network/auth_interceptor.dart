@@ -6,6 +6,9 @@ import 'auth_api_service.dart';
 
 class AuthInterceptor extends Interceptor {
 
+  bool _isRefreshing = false;
+
+
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -15,11 +18,13 @@ class AuthInterceptor extends Interceptor {
     final accessToken =
         await SecureStorageService.getAccessToken();
 
+
     if (accessToken != null && accessToken.isNotEmpty) {
 
       options.headers['Authorization'] =
           'Bearer $accessToken';
     }
+
 
     handler.next(options);
   }
@@ -33,9 +38,16 @@ class AuthInterceptor extends Interceptor {
   ) async {
 
 
-    if (err.response?.statusCode == 401) {
+    final statusCode =
+        err.response?.statusCode;
+
+
+    if (statusCode == 401 && !_isRefreshing) {
 
       try {
+
+        _isRefreshing = true;
+
 
         final refreshResponse =
             await AuthApiService.refreshToken();
@@ -45,12 +57,29 @@ class AuthInterceptor extends Interceptor {
             refreshResponse.data["access_token"];
 
 
-        if (newAccessToken != null) {
+        if (newAccessToken != null &&
+            newAccessToken.isNotEmpty) {
 
-          print(
-            "Token refresh successful",
+
+          await SecureStorageService.saveAccessToken(
+            newAccessToken,
           );
 
+
+          final requestOptions =
+              err.requestOptions;
+
+
+          requestOptions.headers['Authorization'] =
+              'Bearer $newAccessToken';
+
+
+
+          final response =
+              await Dio().fetch(requestOptions);
+
+
+          return handler.resolve(response);
         }
 
 
@@ -60,6 +89,10 @@ class AuthInterceptor extends Interceptor {
           "Token refresh failed: $e",
         );
 
+
+      } finally {
+
+        _isRefreshing = false;
       }
 
     }
