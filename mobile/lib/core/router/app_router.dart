@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../features/authentication/presentation/screens/login_screen.dart';
 import '../../features/authentication/presentation/screens/register_screen.dart';
+import '../../features/home/presentation/screens/home_screen.dart';
 
 /// ===========================================================
 /// App Router
@@ -44,8 +45,17 @@ class AppRouter {
         name: 'register',
         builder: (context, state) => const RegisterScreen(),
       ),
-    ],
 
+// =======================================================
+// HOME
+// =======================================================
+GoRoute(
+  path: '/home',
+  name: 'home',
+  builder: (context, state) => const HomeScreen(),
+),
+
+],
     // =========================================================
     // ERROR PAGE
     // =========================================================

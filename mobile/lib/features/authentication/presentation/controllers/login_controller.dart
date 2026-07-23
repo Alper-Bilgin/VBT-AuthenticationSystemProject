@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/network/auth_api_service.dart';
-import '../../../../core/storage/secure_storage_service.dart';
 
 /// ===========================================================
 /// Login Controller
@@ -44,9 +43,6 @@ class LoginController extends ChangeNotifier {
   email: emailController.text.trim(),
   password: passwordController.text,
 );
-
-// Temporary debug
-await SecureStorageService.debugPrintTokens();
 
 return true;
     } on DioException catch (e) {

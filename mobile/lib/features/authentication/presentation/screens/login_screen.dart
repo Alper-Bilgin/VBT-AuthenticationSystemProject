@@ -59,17 +59,16 @@ Future<void> _login() async {
   if (!mounted) return;
 
   if (success) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Login successful."),
-      ),
-    );
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text("Login successful."),
+    ),
+  );
 
-    // TODO: Home ekranı eklendiğinde yönlendirme yapılacak.
-    // context.go('/home');
+  context.go('/home');
 
-    return;
-  }
+  return;
+}
 
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(

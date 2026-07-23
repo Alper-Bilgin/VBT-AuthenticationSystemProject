@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../storage/secure_storage_service.dart';
 import 'auth_api_service.dart';
@@ -23,10 +24,12 @@ class AuthInterceptor extends Interceptor {
 
       options.headers['Authorization'] =
           'Bearer $accessToken';
+
     }
 
 
     handler.next(options);
+
   }
 
 
@@ -42,6 +45,7 @@ class AuthInterceptor extends Interceptor {
         err.response?.statusCode;
 
 
+
     if (statusCode == 401 && !_isRefreshing) {
 
       try {
@@ -49,16 +53,30 @@ class AuthInterceptor extends Interceptor {
         _isRefreshing = true;
 
 
+
         final refreshResponse =
             await AuthApiService.refreshToken();
 
 
+
+        final data = refreshResponse.data;
+
+
+
         final newAccessToken =
-            refreshResponse.data["access_token"];
+            data["access_token"];
+
+
+
+        final newRefreshToken =
+            data["refresh_token"];
+
+
 
 
         if (newAccessToken != null &&
             newAccessToken.isNotEmpty) {
+
 
 
           await SecureStorageService.saveAccessToken(
@@ -66,8 +84,24 @@ class AuthInterceptor extends Interceptor {
           );
 
 
+
+
+          if (newRefreshToken != null &&
+              newRefreshToken.isNotEmpty) {
+
+
+            await SecureStorageService.saveRefreshToken(
+              newRefreshToken,
+            );
+
+          }
+
+
+
+
           final requestOptions =
               err.requestOptions;
+
 
 
           requestOptions.headers['Authorization'] =
@@ -75,29 +109,42 @@ class AuthInterceptor extends Interceptor {
 
 
 
+
           final response =
               await Dio().fetch(requestOptions);
 
 
+
           return handler.resolve(response);
+
         }
+
 
 
       } catch (e) {
 
-        print(
+
+        debugPrint(
           "Token refresh failed: $e",
         );
+
+
+
+        await SecureStorageService.clear();
 
 
       } finally {
 
         _isRefreshing = false;
+
       }
 
     }
 
 
+
     handler.next(err);
+
   }
+
 }
